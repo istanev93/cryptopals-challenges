@@ -13,4 +13,15 @@ std::vector<uint8_t> FixedXor(const uint8_t* arg1, size_t arg1len, const uint8_t
     return result;
 }
 
+std::vector<uint8_t> SingleXor(const uint8_t* arg, size_t length, const uint8_t ch) {
+    std::vector<uint8_t> result;
+    result.reserve(length);
+
+    for (auto i = 0; i < length; i++) {
+        result.push_back(arg[i] ^ ch);
+    }
+
+    return result;
+}
+
 }

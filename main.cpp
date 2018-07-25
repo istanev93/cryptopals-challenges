@@ -1,6 +1,7 @@
 #include <iostream>
 #include "convert.hpp"
 #include "xor.hpp"
+#include "match.hpp"
 
 int main(int argc, char const *argv[]) {
     uint8_t bytes[] = { 
@@ -22,5 +23,18 @@ int main(int argc, char const *argv[]) {
     auto xor_vector = Utility::FixedXor(xor1, sizeof(xor1), xor2, sizeof(xor2));
     std::cout << Utility::ToHex(xor_vector.data(), xor_vector.size()) << std::endl;
     
+    uint8_t single_str[] = { 
+        0x1b, 0x37, 0x37, 0x33, 0x31, 0x36, 0x3f, 0x78, 0x15, 0x1b, 0x7f, 0x2b,
+        0x78, 0x34, 0x31, 0x33, 0x3d, 0x78, 0x39, 0x78, 0x28, 0x37, 0x2d, 0x36,
+        0x3c, 0x78, 0x37, 0x3e, 0x78, 0x3a, 0x39, 0x3b, 0x37, 0x36
+    };
+
+    for (uint8_t i = 0; i < static_cast<uint8_t>(255); i++) {
+        auto res = Utility::SingleXor(single_str, sizeof(single_str), static_cast<uint8_t>(i));
+        if (Utility::IsText(res, 4)) {
+            std::cout << std::string(res.begin(), res.end()) << std::endl;
+        }
+    }
+
     return 0;
 }

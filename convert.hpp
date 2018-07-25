@@ -5,12 +5,6 @@
 
 namespace Utility {
 
-const uint8_t _base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-const uint8_t _mask = 0b11111100;
-const uint32_t _shift_amount = __builtin_popcount(_mask);
-
-const uint8_t _hexmap[] = "0123456789ABCDEF";
-
 std::string ToBase64(const uint8_t* bytes, size_t length);
 std::string ToHex(const uint8_t* bytes, size_t length);
 

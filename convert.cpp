@@ -2,6 +2,12 @@
 
 namespace Utility {
 
+static const uint8_t _base64_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static const uint8_t _mask = 0b11111100;
+static const uint32_t _shift_amount = __builtin_popcount(_mask);
+
+static const uint8_t _hexmap[] = "0123456789ABCDEF";
+
 static std::string padding(size_t length) {
     auto rem = length % 3;
     return std::string(rem == 1 ? "=" : rem == 2 ? "==" : "");
