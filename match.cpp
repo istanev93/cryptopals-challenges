@@ -8,12 +8,12 @@ namespace Utility {
 static const char *_patterns[] = {
     " a ", " the ", " is ", " of ", " at ",
     " on ", "'s", "oo", "ng", "'ve",
-    "'m"
+    "'m", " that ", " party "
 };
 static constexpr size_t _psizes[] = {
     3, 5, 4, 4, 4,
     4, 2, 2, 2, 3,
-    2
+    2, 6, 7
 };
 
 static constexpr size_t _plen = sizeof(_patterns) / sizeof(*_patterns);
