@@ -1,10 +1,14 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <algorithm>
+#include <tuple>
 
 #include "file.hpp"
 #include "convert.hpp"
 #include "xor.hpp"
 #include "match.hpp"
+#include "calculate.hpp"
 
 const int FILE_4_LINES = 327;
 const int FILE_4_LINESZ = 60;
@@ -56,6 +60,9 @@ int main(int argc, char const *argv[]) {
         }
     }
 
+    //
+    // Challenge 4
+    //
     auto hashes = Utility::ReadKnownFile("4.txt", FILE_4_LINESZ, FILE_4_LINES);
     for (auto& hash : hashes) {
         for (auto i = 0; i < 256; i++) {
@@ -66,5 +73,60 @@ int main(int argc, char const *argv[]) {
         }
     }
 
+    //
+    // Challenge 5
+    //
+    const char text[] = "Burning 'em, if you ain't quick and nimble\n"
+        "I go crazy when I hear a cymbal";
+    const char key[] = "ICE";
+    auto res = Utility::RepeatingXor(reinterpret_cast<const uint8_t *>(text), sizeof(text) - 1, reinterpret_cast<const uint8_t *>(key), sizeof(key) - 1);
+    std::cout << Utility::ToHex(res.data(), res.size()) << std::endl;
+
+    const char other1[] = "Here is the opening stanza of an important work of the English language:";
+    res = Utility::RepeatingXor(reinterpret_cast<const uint8_t *>(other1), sizeof(other1) - 1, reinterpret_cast<const uint8_t *>(key), sizeof(key) - 1);
+    std::cout << Utility::ToHex(res.data(), res.size()) << std::endl;
+
+    const char other2[] = "res = Utility::RepeatingXor(reinterpret_cast<const uint8_t *>(other2), sizeof(other2) - 1, reinterpret_cast<const uint8_t *>(key), sizeof(key) - 1);";
+    res = Utility::RepeatingXor(reinterpret_cast<const uint8_t *>(other2), sizeof(other2) - 1, reinterpret_cast<const uint8_t *>(key), sizeof(key) - 1);
+    std::cout << Utility::ToHex(res.data(), res.size()) << std::endl;
+
+    const char other3[] = "istanev93@gmail.com";
+    res = Utility::RepeatingXor(reinterpret_cast<const uint8_t *>(other3), sizeof(other3) - 1, reinterpret_cast<const uint8_t *>(key), sizeof(key) - 1);
+    std::cout << Utility::ToHex(res.data(), res.size()) << std::endl;
+
+    //
+    // Challenge 6
+    //
+    const char s1[] = "this is a test";
+    const char s2[] = "wokka wokka!!!";
+    std::cout << Utility::HammingDistance(s1, s2, sizeof(s1)) << std::endl;
+
+    auto file6 = Utility::ReadKnownFile("6.txt", 60, 64);
+    std::vector<std::tuple<int, int>> distances;
+    distances.reserve(file6.size());
+
+    for (auto line = 0, keysz = 2; line < file6.size(); keysz++, line++) {
+        auto text = file6[line];
+        auto tlen = text.size();
+
+        auto normalised = 0;
+        auto blocks = text.size() / keysz;
+        for (auto block = 0; block < blocks; block += 2) {
+            auto first = text.data() + (block * keysz);
+            auto second = text.data() + ((block + 1) * keysz);
+            auto dist = Utility::HammingDistance(reinterpret_cast<const char*>(first), reinterpret_cast<const char*>(second), keysz);
+            normalised += dist / keysz;
+        }
+        if (blocks != 0) {
+            normalised /= blocks;
+        }
+        
+        distances.push_back(std::make_tuple(normalised, keysz));
+    }
+    auto minv = std::min_element(distances.begin(), distances.end(), 
+        [&](std::tuple<int, int> l, std::tuple<int, int> r) -> bool {
+            return std::get<0>(l) < std::get<0>(r);
+        });
+    std::cout << std::get<1>(*(minv)) << std::endl;
     return 0;
 }

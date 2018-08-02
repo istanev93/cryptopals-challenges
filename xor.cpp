@@ -24,4 +24,19 @@ std::vector<uint8_t> SingleXor(const uint8_t* arg, size_t length, const uint8_t 
     return result;
 }
 
+std::vector<uint8_t> RepeatingXor(const uint8_t* text, size_t tlen, const uint8_t* key, size_t klen) {
+    std::vector<uint8_t> result;
+    result.reserve(tlen);
+
+    for (auto i = 0, k = 0; i < tlen; i++) {
+        result.push_back(text[i] ^ key[k]);
+
+        if (++k == klen) {
+            k = 0;
+        }
+    }
+
+    return result;
+}
+
 }

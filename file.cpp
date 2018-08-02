@@ -2,6 +2,7 @@
 
 #include <map>
 #include <fstream>
+#include <iostream>
 
 namespace Utility {
 
@@ -25,13 +26,12 @@ static std::map<int, uint8_t> _map {
 };
 
 std::vector<std::vector<uint8_t>> ReadKnownFile(const char *filename, const int linesz, const int nlines) {
-    std::ifstream file (filename, std::ifstream::in);
+    std::ifstream file(filename, std::ifstream::in);
     std::vector<std::vector<uint8_t>> lines;
     lines.reserve(nlines);
 
     for (auto i = 0; i < nlines && file.good(); i++) {
         std::vector<uint8_t> v;
-        v.reserve(linesz / 2);
 
         uint8_t byte;
         do {

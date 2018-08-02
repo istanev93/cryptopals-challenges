@@ -2,6 +2,7 @@
 #define FILE_HPP
 
 #include <vector>
+#include <string>
 
 namespace Utility {
 
